@@ -15,12 +15,14 @@
 # use the find command to generate the list of files with their sizes, with an error redirect to /dev/null
 # use cut or awk to display only the output desired
 
-echo "Setuid files for 12 biggest files:"
+echo "Setuid files"
 echo "============="
-find / -type f -executable -perm -4000 -ls 2>/dev/null | sort -k 5 | head -n 12 
-echo "Setuid files for12 biggest files "
+find / -type f -executable -perm -4000 -ls 2>/dev/null | sort -k 5
+echo "Setuid files"
 
 # for the task, add
 # commands to display a title
 # commands to make a list of the 12 biggest files
 # sort/format whatever to display the list properly
+echo "List of 12 biggest files with details"
+du -hsx * | sort -rh | head -12
