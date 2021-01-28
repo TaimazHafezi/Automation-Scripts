@@ -17,7 +17,7 @@
 
 echo "Setuid files for 12 biggest files:"
 echo "============="
-find / -type f -executable -perm -4000 -ls 2>/dev/null | sort -k 5 | head -n 12
+find / -type f -executable -perm -4000 -ls 2>/dev/null | sort -k 5 | head -n 12 
 echo "Setuid files for12 biggest files "
 
 # for the task, add
