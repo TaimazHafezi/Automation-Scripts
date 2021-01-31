@@ -25,4 +25,9 @@ echo "Setuid files"
 # commands to make a list of the 12 biggest files
 # sort/format whatever to display the list properly
 echo "List of 12 biggest files with details"
-du -hsx * | sort -rh | head -12
+find / -type f -exec ls -l --block-size=MB {} + 2>/dev/null | sort -k5 -hr | head -n 12 | awk '{print $3, $5, $9}'
+echo""
+
+echo"list of files with their sizes, with an error redirect to /dev/null"
+find / -type f -executable -perm -2000 -ls 2>/dev/null | sort -k 5
+echo""
