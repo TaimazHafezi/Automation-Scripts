@@ -20,5 +20,5 @@ sum=$((Firstnum + Secondnum + Thirdnum))
 product=$((Firstnum * Secondnum * Thirdnum))
 cat <<EOF
 $Firstnum plus $Secondnum plus $Thirdnum is $sum
-$Firstnum multiplied to $Secondnum multiplied to $Third is $product
+$Firstnum multiplied to $Secondnum multiplied to $Thirdnum is $product
 EOF
