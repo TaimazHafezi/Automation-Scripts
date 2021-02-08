@@ -26,7 +26,7 @@ wget -q -O ~/public_html/pics/pics.zip http://zonzorp.net/pics.zip && unzip -d ~
 #     test to make sure the download and extraction commands work
 #     then delete the local copy of the tarfile if the extraction was successful
 wget -O ~/public_html/pics/pics.tgz https://zonzorp.net/pics.tgz
-tar -xzf ~/public_html/pics/pics.tgz -C ~/public_html/pics || ~/public_html/pics/pics.tgz
+tar -xzf ~/public_html/pics/pics.tgz -C ~/public_html/pics && rm ~/Public_html/pics/pics.tgz
 
 # Make a report on what we have in the Pictures directory
 test -d ~/public_html/pics && cat <<EOF
