@@ -19,7 +19,7 @@ echo "Please enter your student Number"
 read stdnumber
 
 # Use that to save the desired hostname of pcNNNNNNNNNN in a variable, where NNNNNNNNN is the student number entered by the user
-hostnamectl set-hostname pc$stnumber
+hostnamectl set-hostname pc$stdnumber
 newhostname=$(hostname)
 echo " new hostname is: $newhostname"
 echo ""
