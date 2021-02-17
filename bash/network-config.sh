@@ -14,16 +14,12 @@
 #         in the output section at the end of the script. If the commands included in this script
 #         don't make sense to you, feel free to create your own commands to find your ip addresses,
 #         host names, etc.
-hostname=$(hostname)
+Hostname=$(hostname)
 Interface=$(ip a |awk '/: e/{gsub(/:/,"");print $2}')
 Lan_Address=$(ip a s $Interface |awk '/inet /{gsub(/\/.*/,"");print $2}')
 Lan_Hostname=$(getent hosts $Lan_Address | awk '{print $2}')
 External_IP=$(curl -s icanhazip.com)
 External_Name=$(getent hosts $External_Ip | awk '{print $2}')
-
-
-
-
 #
 # For example
 #   In the part of the script that prints the report, the commands to generate the data are mixed in with the literal text output
@@ -90,7 +86,7 @@ Router_Hostname=$(getent hosts $Router_Address | awk '{print $2}')
 #   External Name   : $myExternalName
 
 cat <<EOF
-Hostname        : $hostname
+Hostname        : $Hostname
 LAN Address     : $Lan_Address
 LAN Hostname    : $Lan_Hostname
 External IP     : $External_IP
