@@ -33,25 +33,22 @@
 #####
 # Once per host report
 #####
-
 verbose="no"
+int=""
 while [ $# -gt 0 ]; do
-  case $1 in
-    -v )
-      verbose="yes"
-      ;;
-      * )
-      interface=$1
-      ;;
+  case "$1" in
+    -v)
+     verbose="yes"
+     ;;
+    * )
+     int+="$1"
+     myInterface="$1"
+     echo "$myInterface"
+
   esac
   shift
 done
-#read -p "Enter -v if you want verbose mode to be yes while running the script: " $userinput
-#if [[ $userinput == "-v" ]]; then
-#  verbose="yes"
-#fi
-
-#[ "$verbose" = "yes" ] && echo "Gathering host information"
+[ "$verbose" = "yes" ] && echo "Gathering host information"
 # we use the hostname command to get our system name
 my_hostname=$(hostname)
 
@@ -92,9 +89,8 @@ EOF
 # Per-interface report
 #####
 
-
 # define the interface being summarized
-interface="ens34"
+interface="$myInterface"
 [ "$verbose" = "yes" ] && echo "Reporting on interface(s): $interface"
 
 [ "$verbose" = "yes" ] && echo "Getting IPV4 address and name for interface $interface"
@@ -122,6 +118,11 @@ Network Address : $network_address
 Network Name    : $network_name
 
 EOF
+echo "per Interface name report"
+for(( count=1; count < 10; count++)); do
+  ip link show | grep $count: | awk '{print $1 $2}'
+done
+
 #####
 # End of per-interface report
 #####
