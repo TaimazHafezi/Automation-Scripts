@@ -36,22 +36,22 @@
 
 #verbose="no"
 #while [ $# -gt 0 ]; do
-  #case $1 in
-  #  -v )
-  #    verbose="yes"
-  #    ;;
-  #    * )
-  #    interface=$1
-  #    ;;
-  #esac
-  #shift
+  case $1 in
+    -v )
+      verbose="yes"
+      ;;
+      * )
+      interface=$1
+      ;;
+  esac
+  shift
 #done
-read -p "Enter -v if you want verbose mode on while running the script: " $input
-if [[ $input == *"-v"* ]]; then
-  verbose="yes"
-fi
+#read -p "Enter -v if you want verbose mode on while running the script: " $input
+#if [[ $input == *"-v"* ]]; then
+#  verbose="yes"
+#fi
 
-[ "$verbose" = "yes" ] && echo "Gathering host information"
+#[ "$verbose" = "yes" ] && echo "Gathering host information"
 # we use the hostname command to get our system name
 my_hostname=$(hostname)
 
