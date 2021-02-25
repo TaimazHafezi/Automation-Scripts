@@ -1,5 +1,17 @@
-!#/bin/bash
+#!/bin/bash
+day=$(date +%A)
+if [ $day == "Monday" ]
+then
+  title="In all of the mania that Mondays bring, Don't forget to take care of yourself"
+fi
+hostname=$(hostname)
 
-for var in 2 3 4 5; do
-  echo The $var item
-done
+
+#day=$(date +%A)
+#if [ $day == "Monday" ]
+#then
+  #title="Monday is funday"
+#fi
+cat << EOF
+Welcome to planet $hostname, $title
+EOF
