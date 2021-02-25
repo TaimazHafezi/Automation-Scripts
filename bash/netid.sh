@@ -27,22 +27,24 @@
 # grep is used to filter ip command output so we don't have extra junk in our output
 # stream editing with sed and awk are used to extract only the data we want displayed
 
+
+
+#####
+# Once per host report
+#####
 verbose="no"
 while [ $# -gt 0 ]; do
   case $1 in
     -v )
       verbose="yes"
       ;;
-      * )
+      *)
       interface=$1
       ;;
   esac
   shift
 done
 
-#####
-# Once per host report
-#####
 [ "$verbose" = "yes" ] && echo "Gathering host information"
 # we use the hostname command to get our system name
 my_hostname=$(hostname)
