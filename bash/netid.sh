@@ -45,7 +45,7 @@
       ;;
   esac
   shift
-#done
+done
 #read -p "Enter -v if you want verbose mode on while running the script: " $input
 #if [[ $input == *"-v"* ]]; then
 #  verbose="yes"
