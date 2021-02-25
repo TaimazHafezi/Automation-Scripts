@@ -19,7 +19,7 @@ Interface=$(ip a |awk '/: e/{gsub(/:/,"");print $2}')
 Lan_Address=$(ip a s $Interface |awk '/inet /{gsub(/\/.*/,"");print $2}')
 Lan_Hostname=$(getent hosts $Lan_Address | awk '{print $2}')
 External_IP=$(curl -s icanhazip.com)
-External_Name=$(getent hosts $External_Ip | awk '{print $2}')
+External_Name=$(getent hosts $External_IP | awk '{print $2}')
 #
 # For example
 #   In the part of the script that prints the report, the commands to generate the data are mixed in with the literal text output
