@@ -27,6 +27,19 @@
 # grep is used to filter ip command output so we don't have extra junk in our output
 # stream editing with sed and awk are used to extract only the data we want displayed
 
+verbose="no"
+while [ $# -gt 0 ]; do
+  case $1 in
+    -v )
+      verbose="yes"
+      ;;
+      * )
+      interface=$1
+      ;;
+  esac
+  shift
+done
+
 #####
 # Once per host report
 #####
@@ -72,7 +85,7 @@ EOF
 #####
 
 # define the interface being summarized
-interface="eno1"
+interface="ens33"
 [ "$verbose" = "yes" ] && echo "Reporting on interface(s): $interface"
 
 [ "$verbose" = "yes" ] && echo "Getting IPV4 address and name for interface $interface"
@@ -93,7 +106,7 @@ network_name=$(getent networks $network_number|awk '{print $1}')
 cat <<EOF
 
 Interface $interface:
-===============
+================
 Address         : $ipv4_address
 Name            : $ipv4_hostname
 Network Address : $network_address
