@@ -20,6 +20,7 @@
 #         Your script must allow the user to specify both verbose mode and an interface name if they want
 # TASK 2: Dynamically identify the list of interface names for the computer running the script, and use a for loop to generate the report for every interface except loopback
 
+
 ################
 # Data Gathering
 ################
@@ -32,18 +33,23 @@
 #####
 # Once per host report
 #####
-verbose="no"
-while [ $# -gt 0 ]; do
-  case $1 in
-    -v )
-      verbose="yes"
-      ;;
-      *)
-      interface=$1
-      ;;
-  esac
-  shift
-done
+
+#verbose="no"
+#while [ $# -gt 0 ]; do
+  #case $1 in
+  #  -v )
+  #    verbose="yes"
+  #    ;;
+  #    * )
+  #    interface=$1
+  #    ;;
+  #esac
+  #shift
+#done
+read -p "Enter -v if you want verbose mode on while running the script: " $input
+if [[ $input == *"-v"* ]]; then
+  verbose="yes"
+fi
 
 [ "$verbose" = "yes" ] && echo "Gathering host information"
 # we use the hostname command to get our system name
@@ -86,8 +92,18 @@ EOF
 # Per-interface report
 #####
 
+counter=$(echo Taimaz | sudo -S lshw -class network | awk '/logical name:/{print $3}' | wc -l)
+for((w=1; w<=$counter; w+=1));
+  do
+    interface=$(echo Taimaz | sudo -S lshw -class network |
+      awk '/logical name:/{print $3}' | awk -v z=$w 'NR==z{print $1; exit}')
+  if [[ $interface = lo* ]] ;
+  then continue ;
+fi
+
+
 # define the interface being summarized
-interface="ens33"
+#interface="ens33"
 [ "$verbose" = "yes" ] && echo "Reporting on interface(s): $interface"
 
 [ "$verbose" = "yes" ] && echo "Getting IPV4 address and name for interface $interface"
@@ -118,3 +134,4 @@ EOF
 #####
 # End of per-interface report
 #####
+done
