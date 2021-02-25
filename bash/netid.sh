@@ -46,7 +46,7 @@ while [ $# -gt 0 ]; do
   esac
   shift
 done
-read -p "Enter -v if you want verbose mode on while running the script: " $input
+read -p "Enter -v if you want verbose mode to be yes while running the script: " $input
 if [[ $input == *"-v"* ]]; then
   verbose="yes"
 fi
@@ -94,7 +94,7 @@ EOF
 
 
 # define the interface being summarized
-interface="ens33"
+interface="ens34"
 [ "$verbose" = "yes" ] && echo "Reporting on interface(s): $interface"
 
 [ "$verbose" = "yes" ] && echo "Getting IPV4 address and name for interface $interface"
