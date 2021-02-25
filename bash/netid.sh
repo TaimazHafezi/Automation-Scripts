@@ -116,7 +116,6 @@ Address         : $ipv4_address
 Name            : $ipv4_hostname
 Network Address : $network_address
 Network Name    : $network_name
-
 EOF
 echo "per Interface name report"
 for(( count=1; count < 10; count++)); do
