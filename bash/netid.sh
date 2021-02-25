@@ -34,8 +34,8 @@
 # Once per host report
 #####
 
-#verbose="no"
-#while [ $# -gt 0 ]; do
+verbose="no"
+while [ $# -gt 0 ]; do
   case $1 in
     -v )
       verbose="yes"
