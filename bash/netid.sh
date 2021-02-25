@@ -46,10 +46,10 @@ while [ $# -gt 0 ]; do
   esac
   shift
 done
-#read -p "Enter -v if you want verbose mode on while running the script: " $input
-#if [[ $input == *"-v"* ]]; then
-#  verbose="yes"
-#fi
+read -p "Enter -v if you want verbose mode on while running the script: " $input
+if [[ $input == *"-v"* ]]; then
+  verbose="yes"
+fi
 
 #[ "$verbose" = "yes" ] && echo "Gathering host information"
 # we use the hostname command to get our system name
