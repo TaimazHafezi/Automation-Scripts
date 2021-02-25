@@ -92,18 +92,9 @@ EOF
 # Per-interface report
 #####
 
-counter=$(echo Taimaz | sudo -S lshw -class network | awk '/logical name:/{print $3}' | wc -l)
-for((w=1; w<=$counter; w+=1));
-  do
-    interface=$(echo Taimaz | sudo -S lshw -class network |
-      awk '/logical name:/{print $3}' | awk -v z=$w 'NR==z{print $1; exit}')
-  if [[ $interface = lo* ]] ;
-  then continue ;
-fi
-
 
 # define the interface being summarized
-#interface="ens33"
+interface="ens33"
 [ "$verbose" = "yes" ] && echo "Reporting on interface(s): $interface"
 
 [ "$verbose" = "yes" ] && echo "Getting IPV4 address and name for interface $interface"
@@ -134,4 +125,3 @@ EOF
 #####
 # End of per-interface report
 #####
-done
