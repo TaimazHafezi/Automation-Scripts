@@ -54,9 +54,6 @@ External_Name=$(getent hosts $External_IP | awk '{print $2}')
 # sample of desired output:
 #   Router Address  : 192.168.2.1
 #   Router Hostname : router-name-from-hosts-file
-Router_Address=$(ip r | awk '/via /{gsub(/\/.*/,"");print $3}')
-Router_Hostname=$(getent hosts $Router_Address | awk '{print $2}')
-
 
 
 # we use the hostname command to get our system name
@@ -94,6 +91,4 @@ LAN Address     : $Lan_Address
 LAN Hostname    : $Lan_Hostname
 External IP     : $External_IP
 External Name   : $External_Name
-Router Address  : $Router_Address
-Router Hostname : $Router_Hostname
 EOF
