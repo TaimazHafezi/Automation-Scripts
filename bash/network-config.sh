@@ -15,14 +15,14 @@
 #         don't make sense to you, feel free to create your own commands to find your ip addresses,
 #         host names, etc.
 Hostname=$(hostname)
-Interface=$(ip a |awk '/: ens33/{gsub(/:/,"");print $2}')
+Interface=$(ip a |awk '/: e/{gsub(/:/,"");print $2}')
 Lan_Address=$(ip a s $interface |awk '/inet /{gsub(/\/.*/,"");print $2}')
-HostnameA=$(ip a |awk '/: ens33/{gsub(/:/,"");print $2}')
+HostnameA=$(ip a |awk '/: e/{gsub(/:/,"");print $2}')
 HostnameB=$(ip a s $HostnameA |awk '/inet /{gsub(/\/.*/,"");print $2}')
 Lan_Hostname=$(getent hosts $HostnameB | awk '{print $2}')
 External_IP=$(curl -s icanhazip.com)
-
-External_Name=$(getent hosts $External_IP | awk '{print $2}')
+cmdcurl=$(curl -s icanhazip.com)
+External_Name=$(getent hosts $cmdcurl | awk '{print $2}')
 #
 # For example
 #   In the part of the script that prints the report, the commands to generate the data are mixed in with the literal text output
