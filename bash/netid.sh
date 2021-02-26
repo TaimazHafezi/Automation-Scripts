@@ -37,7 +37,7 @@ verbose="no"
 int=""
 while [ $# -gt 0 ]; do
   case "$1" in
-    -v)
+    -v )
      verbose="yes"
      ;;
     * )
@@ -91,9 +91,12 @@ EOF
 
 # define the interface being summarized
 interface="$myInterface"
+#if [ $interface = "yes" ]; then
+
 [ "$verbose" = "yes" ] && echo "Reporting on interface(s): $interface"
 
 [ "$verbose" = "yes" ] && echo "Getting IPV4 address and name for interface $interface"
+#fi
 # Find an address and hostname for the interface being summarized
 # we are assuming there is only one IPV4 address assigned to this interface
 ipv4_address=$(ip a s $interface|awk -F '[/ ]+' '/inet /{print $3}')
@@ -107,7 +110,10 @@ ipv4_hostname=$(getent hosts $ipv4_address | awk '{print $2}')
 network_address=$(ip route list dev $interface scope link|cut -d ' ' -f 1)
 network_number=$(cut -d / -f 1 <<<"$network_address")
 network_name=$(getent networks $network_number|awk '{print $1}')
-
+echo "per Interface name report"
+for(( count=1; count < 10; count++)); do
+  ip link show | grep $count: | awk '{print $1 $2}'
+done
 cat <<EOF
 
 Interface $interface:
@@ -117,10 +123,7 @@ Name            : $ipv4_hostname
 Network Address : $network_address
 Network Name    : $network_name
 EOF
-echo "per Interface name report"
-for(( count=1; count < 10; count++)); do
-  ip link show | grep $count: | awk '{print $1 $2}'
-done
+
 
 #####
 # End of per-interface report
