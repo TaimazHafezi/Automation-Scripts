@@ -16,9 +16,12 @@
 #         host names, etc.
 Hostname=$(hostname)
 Interface=$(ip a |awk '/: ens33/{gsub(/:/,"");print $2}')
-Lan_Address=$(ip a s |awk '/inet /{gsub(/\/.*/,"");print $2}')
-Lan_Hostname=$(getent hosts $Lan_Address | awk '{print $2}')
+Lan_Address=$(ip a s $interface |awk '/inet /{gsub(/\/.*/,"");print $2}')
+HostnameA=$(ip a |awk '/: ens33/{gsub(/:/,"");print $2}')
+HostnameB=$(ip a s $HostnameA |awk '/inet /{gsub(/\/.*/,"");print $2}')
+Lan_Hostname=$(getent hosts $HostnameB | awk '{print $2}')
 External_IP=$(curl -s icanhazip.com)
+
 External_Name=$(getent hosts $External_IP | awk '{print $2}')
 #
 # For example
