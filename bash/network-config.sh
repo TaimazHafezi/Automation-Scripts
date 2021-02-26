@@ -24,7 +24,7 @@ External_IP=$(curl -s icanhazip.com)
 cmdcurl=$(curl -s icanhazip.com)
 External_Name=$(getent hosts $cmdcurl | awk '{print $2}')
 #
-# For example
+# For example 
 #   In the part of the script that prints the report, the commands to generate the data are mixed in with the literal text output
 #   To separate it and make it easier to read, we should take those commands and put them before the output generation, in their own section that generates the data and saves it in variables
 #   Then we can just use those variables in our output section and it will be easier to read, understand, extend and debug
