@@ -15,8 +15,8 @@
 #         don't make sense to you, feel free to create your own commands to find your ip addresses,
 #         host names, etc.
 Hostname=$(hostname)
-#Interface=$(ip a |awk '/: ens33/{gsub(/:/,"");print $2}')
-Lan_Address=$(ip a s $( ip a |awk '/: ens33/{gsub(/:/,"");print $2}')|awk '/inet /{gsub(/\/.*/,"");print $2}')
+Interface=$(ip a |awk '/: ens33/{gsub(/:/,"");print $2}')
+Lan_Address=$(ip a s |awk '/inet /{gsub(/\/.*/,"");print $2}')
 Lan_Hostname=$(getent hosts $Lan_Address | awk '{print $2}')
 External_IP=$(curl -s icanhazip.com)
 External_Name=$(getent hosts $External_IP | awk '{print $2}')
