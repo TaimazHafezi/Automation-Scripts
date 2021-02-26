@@ -1,17 +1,22 @@
 #!/bin/bash
-day=$(date +%A)
-if [ $day == "Monday" ]
-then
-  title="In all of the mania that Mondays bring, Don't forget to take care of yourself"
-fi
-hostname=$(hostname)
+lanadr1=$(ip a |awk '/: ens33/{gsub(/:/,"");print $2}')
+MyLANaddress=$(ip a s $lanadr1 |awk '/inet /{gsub(/\/.*/,"");print $2}')
 
 
-#day=$(date +%A)
-#if [ $day == "Monday" ]
-#then
-  #title="Monday is funday"
-#fi
-cat << EOF
-Welcome to planet $hostname, $title
+hname1=$(ip a |awk '/: ens33/{gsub(/:/,"");print $2}')
+hname2=$(ip a s $hname1| awk '/inet /{gsub(/\/.*/,"");print $2}')
+MyHostname=$(getent hosts $hname2 | awk '{print $2}')
+
+MyExternalIp=$(curl -s icanhazip.com)
+
+cmdcurl=$(curl -s icanhazip.com)
+MyExternalName=$(getent hosts $cmdcurl | awk '{print $2}')
+
+
+cat <<EOF
+Hostname        : $(hostname)
+LAN Address     : $MyLANaddress
+LAN Hostname    : $MyHostname
+External IP     : $MyExternalIp
+External Name   : $MyExternalName
 EOF
