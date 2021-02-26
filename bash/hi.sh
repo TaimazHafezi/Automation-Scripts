@@ -1,3 +1,4 @@
+
 #!/bin/bash
 #
 # this script displays some host identification information for a Linux machine
@@ -30,26 +31,37 @@
 #####
 # Once per host report
 #####
-
-
 verbose="no"
-int=""
+list_all="no"
+interface_read=""
+printinterfaces="no"
 while [ $# -gt 0 ]; do
-  case "$1" in
-    -v)
-     verbose="yes"
-     ;;
-    * )
-     int+="$1"
-     enteredInterface="$1"
-     echo "$enteredInterface"
-
-  esac
-  shift
+case "$1" in
+  -h | --help )
+    echo ""
+    echo "Usage: $(basename $0) [-h|--help] [-v, verbose] [-a, Print info all interfaces] [Interface-name]"
+    echo ""
+    exit
+  ;;
+  -v )
+    verbose="yes"
+  ;;
+  -a )
+    list_all="yes"
+    printinterfaces="yes"
+  ;;
+  * )
+    if [ "$interface_read" != "" ]; then
+      echo "too many name interfaces">&2
+      exit 2
+    else
+      interface_read="$1"
+      printinterfaces="yes"
+    fi
+  ;;
+esac
+shift
 done
-
-
-
 [ "$verbose" = "yes" ] && echo "Gathering host information"
 # we use the hostname command to get our system name
 my_hostname=$(hostname)
@@ -89,47 +101,60 @@ EOF
 # Per-interface report
 #####
 
-# define the interface being summarize
+# define the interface being summarized
 
+if [ $printinterfaces = "yes" ]; then
+[ "$verbose" = "yes" ] && echo "Retrieving all interfaces present in the system"
+aux_interfaces=$(ip a | awk '/: e/{gsub(/:/,"");print $2}')                    #bring interfaces
+aux_interfaces=$(echo "$aux_interfaces" | awk '{printf "%s ",$0} END {print ""}')   #R
+Interface_array=($aux_interfaces)
+Total_interfaces=${#Interface_array[@]}
 
-  interface="$enteredInterface"
-  echo "Reporting on interface(s): $interface"
+if [ $list_all = "no" ]; then
+  if [ "$interface_read" != "" ]; then
+    if [[ " ${Interface_array[@]} " =~ " $interface_read " ]]; then
+      Interface_array=($interface_read)
+      Total_interfaces=${#Interface_array[@]}
+      [ "$verbose" = "yes" ] && echo "Reporting just the interface selected by the user: $interface_read"
+    else
+      echo "the interface \" $interface_read \" that you are trying to reach do not exist in your system"
+      exit
+    fi
+  else
+    exit
+  fi
+fi
+for (( count=0; count < $Total_interfaces ; count++ )); do
+  interface=${Interface_array[count]}
 
-  echo "Getting IPV4 address and name for interface $interface"
-  # Find an address and hostname for the interface being summarized
-  # we are assuming there is only one IPV4 address assigned to this interface
+  [ "$verbose" = "yes" ] && echo "Reporting on interface(s): $interface"
+
+  [ "$verbose" = "yes" ] && echo "Getting IPV4 address and name for interface $interface"
+# Find an address and hostname for the interface being summarized
+# we are assuming there is only one IPV4 address assigned to this interface
+
   ipv4_address=$(ip a s $interface|awk -F '[/ ]+' '/inet /{print $3}')
   ipv4_hostname=$(getent hosts $ipv4_address | awk '{print $2}')
-
   [ "$verbose" = "yes" ] && echo "Getting IPV4 network block info and name for interface $interface"
-  # Identify the network number for this interface and its name if it has one
-  # Some organizations have enough networks that it makes sense to name them just like how we name hosts
-  # To ensure your network numbers have names, add them to your /etc/networks file, one network to a line, as   networkname networknumber
-  #   e.g. grep -q mynetworknumber /etc/networks || (echo 'mynetworkname mynetworknumber' |sudo tee -a /etc/networks)
+# Identify the network number for this interface and its name if it has one
+# Some organizations have enough networks that it makes sense to name them just like how we name hosts
+# To ensure your network numbers have names, add them to your /etc/networks file, one network to a line, as   networkname networknumber
+#   e.g. grep -q mynetworknumber /etc/networks || (echo 'mynetworkname mynetworknumber' |sudo tee -a /etc/networks)
   network_address=$(ip route list dev $interface scope link|cut -d ' ' -f 1)
   network_number=$(cut -d / -f 1 <<<"$network_address")
   network_name=$(getent networks $network_number|awk '{print $1}')
+cat <<EOF
+Interface $interface:
+===============
+Address         : $ipv4_address
+Name            : $ipv4_hostname
+Network Address : $network_address
+Network Name    : $network_name
+EOF
 
-  echo "
-  Interface $interface:
-  ===============
-  Address         : $ipv4_address
-  Name            : $ipv4_hostname
-  Network Address : $network_address
-  Network Name    : $network_name
-  "
-  ###############task 2 task 2 task 2 #######################################
-#here i use ip link show command to list all the interface name and sort the output through grep and awk command to print out just the names of interface
-  echo "this is task 2, we are catching interface names through for command"
-  for(( count=1; count < 10; count++)); do
-    echo "the list of $count interface of thhis machine is below"
-    ip link show | grep $count: | awk '{print $1 $2}'
-  done
+done
+fi
 
-  #####
-  # End of per-interface report
-  ###
-
-
-  #####
-  # End of per-interface report
+#####
+# End of per-interface report
+#####
