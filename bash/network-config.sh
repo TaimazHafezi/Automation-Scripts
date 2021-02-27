@@ -21,8 +21,8 @@ lan_host_ip=$(getent hosts $Lan_Address)
 Lan_Hostname=$( echo $lan_host_ip | awk '{print $2}')
 External_IP=$(curl -s icanhazip.com)
 External_Name=$(getent hosts $External_IP | awk '{print $2}')
-Router_Address=$(ip r | awk '/default/{print $3}')
-Router_Name=$(cat /etc/hosts | awk '/'$Router_Address'/{print $2}')
+Router_Address=$(ip r | awk '/via/{print $3}')
+Router_Name=$(route|awk '/default/ {print $2}')
 #
 # For example
 #   In the part of the script that prints the report, the commands to generate the data are mixed in with the literal text output
