@@ -88,7 +88,7 @@ External Name : $external_name
 EOF
   break
 fi
-# when option that user put is not -v, then it must be an interface name
+# if option that user put is not equal -v, then it must be an interface name
 if [ $# -eq 1 -a "$1" != "-v" ]; then
       interface="$1"
       ipv4_address=$(ip a s $interface|awk -F '[/ ]+' '/inet /{print $3}')
@@ -122,7 +122,7 @@ EOF
 #####
 # Per-interface report
 #####
-
+# This is where TASK2 begins
 # define the interface being summarized
 # list of all interfaces dynamically
 interface=$(ip a | awk '/: e/{print $2}')
@@ -145,10 +145,10 @@ ipv4_hostname=$(getent hosts $ipv4_address | awk '{print $2}')
 #   e.g. grep -q mynetworknumber /etc/networks || (echo 'mynetworkname mynetworknumber' |sudo tee -a /etc/networks)
 network_address=$(ip route list dev $interface scope link|cut -d ' ' -f 1)
 network_number=$(cut -d / -f 1 <<<"$network_address")
-network_name=$(getent networks $network_number|awk '{print $1}')
+network_name=$(getent networks $network_number| awk '{print $1}')
 cat <<EOF
 
-Interface $interface:
+Interface $interface :
 ================
 Address         : $ipv4_address
 Name            : $ipv4_hostname
