@@ -30,6 +30,13 @@ echo"you entered -h or --help options to get help"
 }
 
 # This function will remove all the temp files created by the script
+function cleanup {
+  rm /tmp/*.$$
+  echo "All the tmp files created by script are deleted"
+  exit
+}
+
+trap cleanup
 # The temp files are all named similarly, "/tmp/somethinginfo.$$"
 # A trap command is used after the function definition to specify this function is to be run if we get a ^C while running
 
