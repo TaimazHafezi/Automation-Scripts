@@ -33,25 +33,37 @@
 #####
 # Once per host report
 #####
+# Task 1
+# setting verbose varibale to no
 verbose="no"
-int=""
+if [ $# -eq 0 ]; then #without option or entry, it prints systme summary, which is what we want.
+  my_hostname=$(hostname)
+  default_router_address=$(ip r s default| cut -d ' ' -f 3)
+  default_router_name=$(getent hosts $default_router_address|awk '{print $2}')
+  external_address=$(curl -s icanhazip.com)
+  external_name=$(getent hosts $external_address | awk '{print $2}')
+  cat <<EOF
+  System Identification Summary
+  =============================
+  Hostname      : $my_hostname
+  Default Router: $default_router_address
+  Router Name   : $default_router_name
+  External IP   : $external_address
+  External Name : $external_name
+EOF
+  fi
+# using case conditin through while loop for -v confition for determining verbose
 while [ $# -gt 0 ]; do
   case "$1" in
     -v )
      verbose="yes"
      ;;
-    * )
-     int+="$1"
-     myInterface="$1"
-     echo "$myInterface"
-
   esac
-  shift
-done
+# If the user includes the option -v on the command line, set the varaible $verbose to contain the string "yes"
+ if [ $1 = "-v" ]; then
 [ "$verbose" = "yes" ] && echo "Gathering host information"
 # we use the hostname command to get our system name
 my_hostname=$(hostname)
-
 [ "$verbose" = "yes" ] && echo "Identifying default route"
 # the default route can be found in the route table normally
 # the router name is obtained with getent
@@ -74,6 +86,28 @@ External IP   : $external_address
 External Name : $external_name
 
 EOF
+  break
+fi
+# when option that user put is not -v, then it must be an interface name
+if [ $# -eq 1 -a "$1" != "-v" ]; then
+      interface="$1"
+      ipv4_address=$(ip a s $interface|awk -F '[/ ]+' '/inet /{print $3}')
+      ipv4_hostname=$(getent hosts $ipv4_address | awk '{print $2}')
+      network_address=$(ip route list dev $interface scope link|cut -d ' ' -f 1)
+      network_number=$(cut -d / -f 1 <<<"$network_address")
+      network_name=$(getent networks $network_number|awk '{print $1}')
+  cat <<EOF
+      Interface $interface :
+      ===============
+      Address         : $ipv4_address
+      Name            : $ipv4_hostname
+      Network Address : $network_address
+      Network Name    : $network_name
+EOF
+    break
+    fi
+    shift
+  done
 
 #####
 # End of Once per host report
@@ -90,13 +124,15 @@ EOF
 #####
 
 # define the interface being summarized
-interface="$myInterface"
-#if [ $interface = "yes" ]; then
-
+# list of all interfaces dynamically
+interface=$(ip a | awk '/: e/{print $2}')
+# determining number of interfaces to run equal loops
+interfacedet=$( ip a | awk '/: e/{print $2}' | wc -l )
+for (( count=1; count <= $interfacedet; count++ )); do
+  interface=$(ip a | awk '/: e/ {print $2}' | awk "NR==$count")
 [ "$verbose" = "yes" ] && echo "Reporting on interface(s): $interface"
 
 [ "$verbose" = "yes" ] && echo "Getting IPV4 address and name for interface $interface"
-#fi
 # Find an address and hostname for the interface being summarized
 # we are assuming there is only one IPV4 address assigned to this interface
 ipv4_address=$(ip a s $interface|awk -F '[/ ]+' '/inet /{print $3}')
@@ -110,10 +146,6 @@ ipv4_hostname=$(getent hosts $ipv4_address | awk '{print $2}')
 network_address=$(ip route list dev $interface scope link|cut -d ' ' -f 1)
 network_number=$(cut -d / -f 1 <<<"$network_address")
 network_name=$(getent networks $network_number|awk '{print $1}')
-echo "per Interface name report"
-for(( count=1; count < 10; count++)); do
-  ip link show | grep $count: | awk '{print $1 $2}'
-done
 cat <<EOF
 
 Interface $interface:
@@ -123,8 +155,7 @@ Name            : $ipv4_hostname
 Network Address : $network_address
 Network Name    : $network_name
 EOF
-
-
+done
 #####
 # End of per-interface report
 #####
