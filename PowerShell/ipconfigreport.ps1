@@ -1,1 +1,1 @@
-﻿Get-CimInstance Win32_NetworkAdapterConfiguration | where IPEnabled -EQ "True" | Format-Table Description, Index, IPAddress, IPSubnet, DNSDomain, DNSHostName
+﻿Get-CimInstance Win32_NetworkAdapterConfiguration | where-object IPEnabled -EQ "True" | Select-Object Description, Index, IPAddress, IPSubnet, DNSDomain, DNSHostName | Format-Table
