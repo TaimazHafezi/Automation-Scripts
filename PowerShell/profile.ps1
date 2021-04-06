@@ -1,1 +1,0 @@
-﻿New-Alias Goto Set-Location
