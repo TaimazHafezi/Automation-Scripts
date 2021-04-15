@@ -140,6 +140,7 @@ function HardwareInfo {
 diskdrives
 # Network Adapter Configuration report function
 function networkadapter {
+"Network adapter configuration report"
     Get-CimInstance Win32_NetworkAdapterConfiguration | Where-Object IPEnabled -eq "True" |
                                                           
                                                               Select-Object @{n="Description";e={$_.Description}},
