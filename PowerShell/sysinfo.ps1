@@ -98,7 +98,6 @@ function HardwareInfo {
 
     function summaryRAM {
     "Summary of RAM"
-   # $totalCapacity = 0
 
     Get-WmiObject -class win32_physicalmemory |
         foreach {
